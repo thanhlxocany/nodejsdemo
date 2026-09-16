@@ -1,0 +1,36 @@
+{
+  "name": "nodejsdemo",
+  "version": "1.0.0",
+  "description": "demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "sass:build": "sass src/resources/scss:src/resources/public/css",
+    "sass:watch": "sass --watch src/resources/scss:src/resources/public/css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thanhlxocany/nodejsdemo.git"
+  },
+  "keywords": [
+    "thanhlx",
+    "nodejs",
+    "demo"
+  ],
+  "author": "thanhlx",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thanhlxocany/nodejsdemo/issues"
+  },
+  "homepage": "https://github.com/thanhlxocany/nodejsdemo#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-handlebars": "^8.0.1",
+    "morgan": "^1.12.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "sass": "^1.104.1"
+  }
+}
