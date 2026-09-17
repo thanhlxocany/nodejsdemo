@@ -4,9 +4,9 @@
   "description": "demo",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
-    "sass:build": "sass src/resources/scss:src/resources/public/css",
-    "sass:watch": "sass --watch src/resources/scss:src/resources/public/css",
+    "start": "nodemon --ext js,hbs,scss src/index.js",
+    "sass:build": "sass src/resources/scss:src/public/css",
+    "sass:watch": "sass --watch src/resources/scss:src/public/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
