@@ -1,3 +1,5 @@
+// Đọc file .env, nạp vào process.env
+require('dotenv').config();
 // Import thư viện Express để tạo web server
 const express = require('express');
 // Import morgan để ghi log request (dùng để debug, xem ai gọi API gì)
@@ -6,7 +8,8 @@ var morgan = require('morgan')
 var { engine } = require('express-handlebars')
 // Module path có sẵn của Node, dùng để ghép đường dẫn file/thư mục
 const path = require('path');
-
+// Router chứa các route, logic xử lý nằm trong Controller (src/app/controllers)
+const routes = require('./routes');
 
 // Khởi tạo ứng dụng Express
 const app = express();
@@ -27,19 +30,11 @@ app.set('views', path.join(__dirname, 'resources/views'));
 // Khai báo view engine đang dùng là hbs (Handlebars)
 app.set('view engine', 'hbs');
 
-// Route xử lý khi có request GET tới trang chủ "/"
-app.get('/', (req, res) => {
-    // Render view "home" và truyền dữ liệu động vào template
-    res.render('home', {
-      title: 'Trang chủ',
-      heading: 'Xin chào Handlebars',
-      description: 'Đây là sample dùng Express và express-handlebars.',
-      features: ['Layout dùng chung', 'Dữ liệu động', 'Render bằng Express']
-    });
-});
+// Gắn toàn bộ route (src/routes/index.js) vào app
+app.use('/', routes);
 
-// Khởi động server, lắng nghe request tại cổng 3000
-app.listen(3000, () => {
-  console.log('Server chạy tại port 3000');
-
+// Khởi động server, lắng nghe request tại cổng lấy từ .env (mặc định 3000 nếu không có)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server chạy tại port ${PORT}`);
 });
