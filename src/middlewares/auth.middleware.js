@@ -6,14 +6,14 @@ function auth(req, res, next) {
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
   if (!token) {
-    return res.status(401).json({ success: false, message: 'Chua dang nhap' });
+    return res.status(401).json({ success: false, message: 'Chưa đăng nhập' });
   }
 
   try {
     req.user = jwt.verify(token, env.jwtSecret);
     next();
   } catch (error) {
-    return res.status(401).json({ success: false, message: 'Token khong hop le' });
+    return res.status(401).json({ success: false, message: 'Token không hợp lệ' });
   }
 }
 

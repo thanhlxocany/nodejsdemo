@@ -1,4 +1,4 @@
-function success(res, data = null, message = 'Thanh cong', statusCode = 200) {
+function success(res, data = null, message = 'Thành công', statusCode = 200) {
   return res.status(statusCode).json({
     success: true,
     message,
@@ -6,7 +6,7 @@ function success(res, data = null, message = 'Thanh cong', statusCode = 200) {
   });
 }
 
-function error(res, message = 'Co loi xay ra', statusCode = 500) {
+function error(res, message = 'Có lỗi xảy ra', statusCode = 500) {
   return res.status(statusCode).json({
     success: false,
     message

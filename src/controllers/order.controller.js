@@ -2,37 +2,30 @@ const orderService = require('../services/order.service');
 const response = require('../utils/response');
 
 class OrderController {
-  async getAll(req, res, next) {
-    try {
-      const orders = await orderService.getAll();
-      response.success(res, orders);
-    } catch (error) {
-      next(error);
-    }
+  async getAll(req, res) {
+    response.success(res, await orderService.getAll(req.query));
   }
 
-  async getById(req, res, next) {
-    try {
-      const order = await orderService.getById(req.params.id);
-      if (!order) {
-        return response.error(res, 'Khong tim thay hoa don', 404);
-      }
-      response.success(res, order);
-    } catch (error) {
-      next(error);
-    }
+  async getSummary(req, res) {
+    response.success(res, await orderService.getSummary());
   }
 
-  async create(req, res, next) {
-    try {
-      const order = await orderService.createOrder({
-        items: req.body.items,
-        createdBy: req.user.id
-      });
-      response.success(res, order, 'Tao hoa don thanh cong', 201);
-    } catch (error) {
-      next(error);
-    }
+  async getById(req, res) {
+    response.success(res, await orderService.getById(req.params.id));
+  }
+
+  async create(req, res) {
+    const result = await orderService.createOrder({ ...req.body, createdBy: req.user.id });
+    response.success(res, result, 'Tạo hóa đơn thành công', 201);
+  }
+
+  async updateStatus(req, res) {
+    const order = await orderService.updateStatus(req.params.id, req.body.status);
+    response.success(res, order, 'Cập nhật trạng thái thành công');
+  }
+
+  async refund(req, res) {
+    response.success(res, await orderService.refund(req.params.id), 'Hoàn tiền thành công');
   }
 }
 

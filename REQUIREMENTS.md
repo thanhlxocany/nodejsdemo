@@ -15,7 +15,7 @@ Backend REST API bằng Node.js + Express + MongoDB (Mongoose). Không có giao 
 - `GET /api/categories` — Danh sách danh mục (public).
 - `GET /api/categories/:id` — Chi tiết 1 danh mục (public).
 - `POST /api/categories` — Tạo danh mục mới (cần đăng nhập). Body: `{ name, description }`.
-- `PUT /api/categories/:id` — Sửa danh mục (cần đăng nhập).
+- `PATCH /api/categories/:id` — Sửa danh mục (cần đăng nhập).
 - `DELETE /api/categories/:id` — Xoá danh mục (cần đăng nhập).
 
 ## 3. Quản lý sản phẩm (Product)
@@ -23,7 +23,7 @@ Backend REST API bằng Node.js + Express + MongoDB (Mongoose). Không có giao 
 - `GET /api/products` — Danh sách sản phẩm, kèm thông tin danh mục (populate) (public).
 - `GET /api/products/:id` — Chi tiết 1 sản phẩm (public).
 - `POST /api/products` — Tạo sản phẩm mới (cần đăng nhập). Body: `{ name, price, stock, unit, category }`.
-- `PUT /api/products/:id` — Sửa sản phẩm (cần đăng nhập).
+- `PATCH /api/products/:id` — Sửa sản phẩm (cần đăng nhập).
 - `DELETE /api/products/:id` — Xoá sản phẩm (cần đăng nhập).
 
 Mỗi sản phẩm thuộc về 1 danh mục (`category` là ObjectId tham chiếu tới Category).
@@ -71,3 +71,16 @@ Theo `src/utils/response.js` đã có sẵn:
 - Test tự động (unit test / integration test).
 
 Xem thêm quy tắc coding convention chung ở [CLAUDE.md](CLAUDE.md).
+
+## 8. API bổ sung theo FE (grocery-store-fe)
+
+Response dùng `id` (không phải `_id`), field theo đúng type ở FE. Xem chi tiết tại `/api-docs` (Swagger). Tất cả cần đăng nhập.
+
+- Products: `GET /products?search&categoryId&status`, `GET /products/summary`. Field: `sku, barcode, costPrice, sellPrice, vatPercent, stockQty, minStock, categoryId, status...`
+- Orders: `GET /orders?search&status&from&to`, `GET /orders/summary`, `PATCH /orders/:id/status`, `POST /orders/:id/refund`. `POST /orders` nhận `{ items: [{ productId, quantity }], paymentMethod, vatPercent, customerId? }` và trả `{ orderId, code }`. Huỷ/hoàn tiền sẽ cộng lại tồn kho.
+- Customers, Suppliers: `GET/POST`, `GET /:id`, `GET /summary`. Mã `KH00001`, `NCC00001` tự sinh.
+- Inventory: `GET /inventory`, `/summary`, `/movements`, `POST /inventory/adjustments` (`in` cộng, `out` trừ, `adjust` đặt tồn = quantity). Bán hàng và hoàn hàng tự ghi biến động kho.
+- Dashboard: `GET /dashboard/summary`. Reports: `GET /reports/summary?from&to` (mặc định 7 ngày gần nhất, so sánh với kỳ liền trước).
+- Settings: `GET/PUT /settings/store`, `GET/POST /settings/staff` (mật khẩu nhân viên mới = `DEFAULT_STAFF_PASSWORD`, mặc định `123456`).
+
+Chưa có: phiếu nhập hàng nhà cung cấp (`recentPurchases` luôn rỗng, `pendingPurchases` = 0), tự tính hạng/điểm khách hàng, phân quyền theo role.

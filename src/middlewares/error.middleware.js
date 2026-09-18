@@ -1,9 +1,18 @@
-function errorMiddleware(err, req, res, next) {
-  console.error(err);
+function getStatus(err) {
+  if (err.status) return err.status;
+  if (err.name === 'ValidationError' || err.name === 'CastError' || err.code === 11000) return 400;
+  return 500;
+}
 
-  res.status(err.status || 500).json({
+function errorMiddleware(err, req, res, next) {
+  const status = getStatus(err);
+  if (status === 500) console.error(err);
+
+  const message = err.code === 11000 ? 'Dữ liệu bị trùng (code/sku/email đã tồn tại)' : err.message;
+
+  res.status(status).json({
     success: false,
-    message: err.message || 'Co loi xay ra tren server'
+    message: message || 'Có lỗi xảy ra trên server'
   });
 }
 

@@ -7,7 +7,7 @@ async function register({ name, email, password }) {
   // SELECT * FROM users WHERE email = email LIMIT 1;
   const existing = await User.findOne({ email });
   if (existing) {
-    const error = new Error('Email da duoc su dung');
+    const error = new Error('Email đã được sử dụng');
     error.status = 400;
     throw error;
   }
@@ -23,14 +23,14 @@ async function login({ email, password }) {
   // SELECT * FROM users WHERE email = email LIMIT 1;
   const user = await User.findOne({ email });
   if (!user) {
-    const error = new Error('Email hoac mat khau khong dung');
+    const error = new Error('Email hoặc mật khẩu không đúng');
     error.status = 401;
     throw error;
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    const error = new Error('Email hoac mat khau khong dung');
+    const error = new Error('Email hoặc mật khẩu không đúng');
     error.status = 401;
     throw error;
   }
@@ -47,7 +47,7 @@ async function login({ email, password }) {
 async function getCurrentUser(id) {
   const user = await User.findById(id).select('-password');
   if (!user) {
-    const error = new Error('Khong tim thay nguoi dung');
+    const error = new Error('Không tìm thấy người dùng');
     error.status = 404;
     throw error;
   }

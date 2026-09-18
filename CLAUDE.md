@@ -41,9 +41,11 @@ src/
 ## Coding convention
 
 - Dùng `async/await`, không dùng `.then/.catch` lồng nhau.
-- Luôn bọc code có thao tác DB/async trong `try/catch`, lỗi thì `next(error)` để middleware `error.middleware.js` xử lý tập trung — không tự viết `res.status(500)` rải rác trong controller.
+- Express 5 tự bắt lỗi của hàm `async`, nên controller không cần `try/catch`: cứ `throw` (dùng `utils/httpError.js`) rồi `error.middleware.js` xử lý tập trung. Không tự viết `res.status(500)` rải rác trong controller.
 - Không hard-code giá trị cấu hình (port, URI DB, secret...) — luôn đọc qua `config/env.js` (biến môi trường từ `.env`).
-- Không viết comment giải thích code làm gì (code phải tự đọc hiểu qua tên biến/hàm), chỉ comment khi có lý do đặc biệt (workaround, giới hạn kỹ thuật...).
+- Không viết comment giải thích code làm gì (code phải tự đọc hiểu qua tên biến/hàm). Được phép: comment SQL tương đương trong service (giúp người học Mongoose dễ đối chiếu), và comment cho workaround/giới hạn kỹ thuật.
+- Thông báo trả về cho người dùng (message lỗi, message thành công) viết tiếng Việt có dấu.
+- Tài liệu Swagger viết bằng khối `@openapi` ngay trên từng route trong `routes/*.js`; schema dùng chung khai báo ở `config/swagger.js`. Thêm/sửa route thì sửa khối comment ngay phía trên.
 - Không thêm thư viện/pattern mới khi task hiện tại chưa cần đến.
 - Mỗi file chỉ nên đảm nhiệm một trách nhiệm (single responsibility) — không nhét route + logic + query vào chung 1 file.
 
